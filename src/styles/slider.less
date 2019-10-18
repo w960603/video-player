@@ -1,0 +1,42 @@
+/*进度条*/
+.slider {
+  width: 100%;
+
+  .slider-runway {
+    position: relative;
+    //width: 91%;
+    height: 4px;
+    border-radius: 10px;
+    background-color: rgba(200, 200, 200, .8);
+    //overflow: hidden;
+    cursor:pointer;
+    .slider-bar {
+      width: 0;
+      height: 100%;
+      background-color: #fff;
+      border-radius: 10px;
+    }
+
+    .slider-btn-wrapper {
+      position: absolute;
+      top: -5px;
+      width: 10px;
+      height: 10px;
+      padding: 2px;
+      transform: translateX(-50%);
+      cursor: pointer;
+      overflow: hidden;
+
+      &.hover .slider-btn, &.dragging .slider-btn {
+        transform: scale(1.2);
+      }
+
+      .slider-btn {
+        width: 100%;
+        height: 100%;
+        background-color: #e6e6e6;
+        border-radius: 50%;
+      }
+    }
+  }
+}

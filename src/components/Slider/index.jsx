@@ -46,16 +46,16 @@ class Slider extends Component {
     this.setState({oldValue, precision, currentValue});
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const {min, max, value} = this.props;
-    if (nextProps.min != min || nextProps.max != max) {
+
+    if (prevProps.min != min || prevProps.max != max) {
       this.setValues();
     }
     // '父组件value值改变, 同时改变子组件的currentValue值, 实现视频播放进度自动改变'
-    if (nextProps.value !== value) {
-
+    if (prevProps.value !== value) {
       this.setState({
-        currentValue: nextProps.value
+        currentValue: value
       })
     }
   }
@@ -66,17 +66,13 @@ class Slider extends Component {
   }
 
   onSliderClick = (e) => {
-    console.log('sliderClick');
-    const {disabled, vertical} = this.props;
+
+    const {disabled} = this.props;
     if (disabled) return;
 
-    if (vertical) {
-      const sliderOffsetBottom = this.slider.getBoundingClientRect().bottom;
-      this.setPosition((sliderOffsetBottom - e.clientY) / this.sliderSize() * 100);
-    } else {
-      const sliderOffsetLeft = this.slider.getBoundingClientRect().left;
-      this.setPosition((e.clientX - sliderOffsetLeft) / this.sliderSize() * 100);
-    }
+
+    const sliderOffsetLeft = this.slider.getBoundingClientRect().left;
+    this.setPosition((e.clientX - sliderOffsetLeft) / this.sliderSize() * 100);
 
     this.setValues();
   }
@@ -125,9 +121,7 @@ class Slider extends Component {
     window.addEventListener('contextmenu', this.onDragEnd);
   }
   onDragStart = (event) => {
-
     if (event.type === 'touchstart') {
-      event.clientY = event.touches[0].clientY;
       event.clientX = event.touches[0].clientX;
     }
 
@@ -135,30 +129,26 @@ class Slider extends Component {
     this.setState({
       dragging: true,
       startX: event.clientX,
-      startY: event.clientY,
       currentX: event.clientX,
-      currentY: event.clientY,
       startPosition: parseInt(this.currentPosition(), 10)
     })
   }
 
   onDragging = (event) => {
-
-    const {dragging, startY, currentY, currentX, startX, startPosition, newPosition} = this.state;
-    const {vertical} = this.props;
+    console.log('zoule');
+    const {dragging, currentX, startX, startPosition, newPosition} = this.state;
     if (dragging) {
+      if (event.type === 'touchmove') {
+        event.clientX = event.touches[0].clientX;
+      }
       this.setState({
         currentX: event.clientX,
-        currentY: event.clientY,
       }, () => {
         let diff;
         const sliderSize = this.sliderSize()
-        if (vertical) {
-          diff = (startY - currentY) / sliderSize * 100;
-        } else {
-          diff = (currentX - startX) / sliderSize * 100;
-        }
-        console.log(sliderSize, startPosition, diff);
+
+        diff = (currentX - startX) / sliderSize * 100;
+
         const _newPosition = startPosition + diff
         this.setState({
           newPosition: _newPosition
@@ -172,7 +162,7 @@ class Slider extends Component {
   onDragEnd = () => {
     const {dragging, newPosition} = this.state
     const {onDragEnd} = this.props
-    console.log(newPosition);
+
     if (dragging) {
       /*
        * 防止在 mouseup 后立即触发 click，导致滑块有几率产生一小段位移
@@ -207,13 +197,14 @@ class Slider extends Component {
     const lengthPerStep = 100 / ((max - min) / step);
     const steps = Math.round(newPosition / lengthPerStep);
     const value = steps * lengthPerStep * (max - min) * 0.01 + min;
-    console.log(value);
+
     this.currentValue = value
     this.onCurrentValueChange(parseFloat(value.toFixed(this.state.precision)))
   }
 
   /* watched Methods */
   onValueChanged(val) {
+    console.log(val);
     const {onChange} = this.props;
     if (onChange) onChange(val);
   }
@@ -222,8 +213,7 @@ class Slider extends Component {
 
   /* Computed Methods */
   sliderSize() {
-    const {vertical} = this.props;
-    return parseInt(this.slider[`client${vertical ? 'Height' : 'Width'}`])
+    return parseInt(this.slider[`clientWidth`])
   }
 
   currentPosition() {
@@ -232,20 +222,14 @@ class Slider extends Component {
   }
 
   wrapperStyle() {
-    return this.props.vertical ? {bottom: this.currentPosition()} : {left: this.currentPosition()};
+    return {left: this.currentPosition()};
   }
 
   barStyle() {
-    const {vertical} = this.props;
-    return vertical
-      ? {
-        height: this.currentPosition(),
-        bottom: this.barStart()
-      }
-      : {
-        width: this.currentPosition(),
-        left: this.barStart()
-      };
+    return {
+      width: this.currentPosition(),
+      left: this.barStart()
+    };
   }
 
   barStart() {
@@ -259,7 +243,7 @@ class Slider extends Component {
 
   render() {
     return (
-      <div className='slider'>
+      <div className={`slider`}>
         <div className="slider-runway" ref={slider => this.slider = slider} onClick={this.onSliderClick}>
           <div className="slider-bar" style={this.barStyle()}/>
           <div
@@ -282,7 +266,6 @@ class Slider extends Component {
 Slider.defaultProps = {
   step: 1,
   value: 1,
-  vertical: false,
   min: 0,
   max: 100,
   disabled: false

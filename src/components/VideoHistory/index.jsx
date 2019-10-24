@@ -4,11 +4,13 @@ class Index extends Component {
 
   render() {
     return (
-      <div>
+      <div className={'video-history'}>
+        <div className={'title'}>
+          播放历史
+        </div>
         {
           this.props.videoList.map(item=>{
-            const src = item.url
-            return <div key={item.timestamp} onClick={()=>this.props.onClick(src)}>{item.fileName}</div>
+            return <div className={'history-item'} key={item.timestamp} onClick={()=>this.props.onClick(item)}>{item.fileName}</div>
           })
         }
       </div>

@@ -1,29 +1,85 @@
-.home{
+@mask: rgba(0, 0, 0, .3) ;
+.home {
   display: flex;
   justify-content: center;
+  flex-direction: initial;
   width: 100%;
 }
-.homeLeft{
+
+.homeLeft {
+  position: relative;
   //width: 600px;
   //margin: 0 auto;
-
   overflow: hidden;
+
+  .mask {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: @mask;
+    text-align: center;
+    color: #ffffff;
+
+    .tips {
+      margin: 8px 0;
+    }
+  }
+}
+
+.homeRight {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: @mask;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .player-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 0;
   overflow: hidden;
   font-size: 0;
   text-align: center;
 
   .video {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     width: 100%;
+    height: 100%;
     background-color: #000;
+    object-fit: contain
   }
 }
 
+
+.file-select-mask {
+  display: inline-block;
+  position: absolute;
+  //right: 0;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  background-color: @mask;
+  color:#f00;
+  font-size: 16px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  .img32{
+    width:32px;
+    height: 32px;
+  }
+
+}
 
 .file-select {
   display: inline-block;
@@ -40,4 +96,10 @@
     cursor: pointer;
   }
 }
+
+// webkit 内核浏览器滚动条样式
+::-webkit-scrollbar {
+  display: none;
+}
+
 

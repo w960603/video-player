@@ -2,10 +2,20 @@ import React, {Component} from 'react';
 import Slider from '../Slider'
 
 class Voice extends Component {
+  static defaultProps = {
+    volume:0,
+    min:0,
+    max:1,
+    step:0.01,
+    isMuted:false,
+    handleMute:()=>{}
+  }
   state={
     mutedSrc:require('@/icons/mute.svg'),
     unmutedSrc:require('@/icons/yinliang.svg')
   }
+
+
   render() {
     return (
       <div  className="voice-wrapper">
@@ -16,7 +26,7 @@ class Voice extends Component {
               :<img src={this.state.unmutedSrc} alt="静音"/>
           }
         </div>
-        <Slider {...this.props}/>
+        <Slider {...this.props} />
       </div>
     );
   }

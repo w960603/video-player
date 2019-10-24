@@ -1,19 +1,27 @@
 import React, {Component} from 'react';
 
 class VideoProgBtns extends Component {
-  state={
+  state = {
     stopBtnSrc: require('@/icons/stop.svg'),
     playBtnSrc: require('@/icons/1.svg'),
   }
   handleChangeProgress = (time) => {
-    console.log('能点');
-    this.props.video.currentTime = this.props.video.currentTime + time
+    const {video} = this.props
+    // 视频有错误时无法使用
+    if (!video.error) {
+      this.props.video.currentTime = this.props.video.currentTime + time
+    }
   }
   handlePauseVideo = () => {
-    this.props.video.paused ?
-      this.props.video.play() :
-      this.props.video.pause()
+    const {video} = this.props
+    // 视频有错误时无法使用
+    if (!video.error) {
+      video.paused ?
+        video.play() :
+        video.pause()
+    }
   }
+
   render() {
     const {stopBtnSrc, playBtnSrc} = this.state
     return (

@@ -1,10 +1,14 @@
 /*进度条*/
 .slider {
   width: 100%;
+  &.is-vertical{
+    .slider-runway{
+      width:4px;
+    }
+  }
 
   .slider-runway {
     position: relative;
-    //width: 91%;
     height: 4px;
     border-radius: 10px;
     background-color: rgba(200, 200, 200, .8);
@@ -24,10 +28,10 @@
       height: 10px;
       padding: 2px;
       transform: translateX(-50%);
-      cursor: pointer;
       overflow: hidden;
 
       &.hover .slider-btn, &.dragging .slider-btn {
+        cursor: pointer;
         transform: scale(1.2);
       }
 

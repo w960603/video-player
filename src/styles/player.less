@@ -63,17 +63,21 @@
 
 
 .file-select-mask {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  //right: 0;
+  right: 0;
   top: 50%;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
+  padding: 8px;
   background-color: @mask;
   color:#f00;
   font-size: 16px;
   transform: translateY(-50%);
   cursor: pointer;
+  transition: .5s;
   .img32{
     width:32px;
     height: 32px;

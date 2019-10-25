@@ -7,10 +7,10 @@ function VideoFullScreen(props, context) {
       <div className={'full-screen'} onClick={props.onClick}>
         {
           isFullScreen ? (
-              <img src={require('@/icons/quxiaoquanping.svg')} alt="取消全屏"/>
+              <img src={require('@/icons/quxiaoquanping.svg')} title={'取消全屏'} alt="取消全屏"/>
             ) :
             (
-              <img src={require('@/icons/quanping.svg')} alt="全屏"/>
+              <img src={require('@/icons/quanping.svg')} title={'全屏'} alt="全屏"/>
             )
         }
       </div>

@@ -24,18 +24,19 @@ class VideoProgBtns extends Component {
 
   render() {
     const {stopBtnSrc, playBtnSrc} = this.state
+    const {video} = this.props
     return (
       <div className="progress-btns">
           <span onClick={this.handleChangeProgress.bind(this, -15)}>
-            <img className={'time-btn'} src={require('@/icons/houtuis.svg')} alt="后退15s"/>
+            <img className={'time-btn'} src={require('@/icons/houtuis.svg')} title={'后退15s'} alt="后退15s"/>
           </span>
         <span onClick={this.handlePauseVideo}>
             <img className={'play-btn'} src={
-              this.props.video && !this.props.video.paused ? stopBtnSrc : playBtnSrc
-            } alt=""/>
+              video && !video.paused ? stopBtnSrc : playBtnSrc
+            } title={video && !video.paused ? '暂停' : '播放'}/>
           </span>
         <span onClick={this.handleChangeProgress.bind(this, 15)}>
-            <img className={'time-btn'} src={require('@/icons/qianjins.svg')} alt="前进15s"/>
+            <img className={'time-btn'} src={require('@/icons/qianjins.svg')} title={'前进15s'} alt="前进15s"/>
           </span>
       </div>
     );

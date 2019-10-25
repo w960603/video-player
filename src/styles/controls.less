@@ -1,9 +1,9 @@
-
+@import './var.less';
 .controls {
   position: absolute;
   left:0;right:0;
   bottom: 0;
-  height: 72px;
+  height: 64px;
   padding: 6px 12px;
   background-color: rgba(0, 0, 0, .5);
   transition: .5s;
@@ -14,7 +14,7 @@
     height: 20px;
     margin: 0 auto;
     color: #fff;
-    font-size: 14px;
+    font-size: 12px;
 
     .time {
       text-align: left;
@@ -34,14 +34,14 @@
       align-items: center;
 
       .time-btn {
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
         cursor: pointer;
       }
 
       .play-btn {
-        width: 42px;
-        height: 42px;
+        width: 36px;
+        height: 36px;
         margin: 0 5px;
         cursor: pointer;
       }
@@ -51,7 +51,7 @@
   .voice-wrapper {
     display: flex;
     align-items: center;
-    width: 80px;
+    width: @toolwid;
 
     .mute-icon {
       width: 24px;

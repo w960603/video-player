@@ -261,19 +261,14 @@ class Home extends Component {
     return (
 
       <div className={'home'}>
-        <div className={'file-select-mask'} style={{right1: this.state.showControl ? '0' : '-40px'}}>
-
-        {/*选择视频*/}
-        <FileSelect onChange={e => this.onFileChange(e)}>选择视频</FileSelect>
-      </div>
         <div className={`homeLeft`} style={{display: videoSrc ? 'block' : 'block'}}>
-          {
-            !videoSrc && (
-              <div className="mask">
-                <div className={'tips'}>您还没有可以播放的视频</div>
-                <FileSelect showBtn onChange={e => this.onFileChange(e)}>选择视频</FileSelect>
-              </div>)
-          }
+          {/*{*/}
+            {/*!videoSrc && (*/}
+              {/*<div className="mask">*/}
+                {/*<div className={'tips'}>您还没有可以播放的视频</div>*/}
+                {/*<FileSelect showBtn onChange={e => this.onFileChange(e)}>选择视频</FileSelect>*/}
+              {/*</div>)*/}
+          {/*}*/}
           <div className={'player-wrapper'} ref={videoContainer => this.videoContainer = videoContainer}
                onFocus={() => {
                  console.log('focus');
@@ -290,11 +285,11 @@ class Home extends Component {
             </div>
 
             {/*打开新视频*/}
-            <div className={'file-select-mask'} style={{right1: this.state.showControl ? '0' : '-40px'}}>
+            <div className={'file-select-mask'} style={{right: this.state.showControl ? '0' : '-48px'}}>
 
               {/*选择视频*/}
               <FileSelect onChange={e => this.onFileChange(e)}>
-                <img className={'img32'} src={this.state.newVideoSrc}/>
+                <img className={'img32'} alt={'打开视频'} title={'打开视频'} src={this.state.newVideoSrc}/>
               </FileSelect>
             </div>
             <div className={'controls'} ref={controls => this.controls = controls}

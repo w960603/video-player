@@ -22,8 +22,8 @@ class Voice extends Component {
         <div className={'mute-icon'} onClick={this.props.handleMute}>
           {
             this.props.isMuted
-            ?<img src={this.state.mutedSrc} alt=""/>
-              :<img src={this.state.unmutedSrc} alt="静音"/>
+            ?<img src={this.state.mutedSrc} alt="取消静音" title={'取消静音'}/>
+              :<img src={this.state.unmutedSrc} title={'静音'} alt="静音"/>
           }
         </div>
         <Slider {...this.props} />

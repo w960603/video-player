@@ -1,4 +1,15 @@
 @mask: rgba(0, 0, 0, .3) ;
+body{
+  height: 100vh;
+  background: url('../static/bg2.jpg') center/cover no-repeat;
+  overflow:hidden;
+}
+.main-title{
+  padding: 10px 0;
+  text-align: center;
+  font-size: 24px;
+  color: #fff;
+}
 .home {
   display: flex;
   justify-content: center;
@@ -36,9 +47,10 @@
 .homeRight {
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: @mask;
+  background: @mask url('../static/history2.jpg') center/cover;
   overflow: hidden;
   box-sizing: border-box;
+  opacity: .9;
 }
 
 .player-wrapper {
@@ -56,6 +68,7 @@
     bottom: 0;
     width: 100%;
     height: 100%;
+    margin:auto;
     background-color: #000;
     object-fit: contain
   }
@@ -63,30 +76,23 @@
 
 
 .file-select-mask {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: absolute;
-  right: 0;
-  top: 50%;
-  width: 28px;
-  height: 28px;
-  padding: 8px;
-  background-color: @mask;
-  color:#f00;
-  font-size: 16px;
-  transform: translateY(-50%);
+  right:10px;top:0;
+  bottom:0;
+  margin: auto;
+  overflow:hidden;
   cursor: pointer;
-  transition: .5s;
   .img32{
-    width:32px;
-    height: 32px;
+    width:24px;
+    height: 24px;
   }
 
 }
 
 .file-select {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 
   .file-select-btn {

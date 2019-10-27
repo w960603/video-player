@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import VideoControllers from '../components/VideoControllers/'
 import VideoHistory from '../components/VideoHistory'
 import Slider from '../components/Slider'
 import FileSelect from '../components/FileSelect'
-import {timeFormat, throttle} from '../utils'
+import { timeFormat, throttle } from '../utils'
 // import VideoFullScreen from "../components/VideoFullScreen";
 
 class Home extends Component {
@@ -14,16 +14,16 @@ class Home extends Component {
     isFullScreen: false,
     stopBtnSrc: require('@/icons/stop.svg'),
     playBtnSrc: require('@/icons/1.svg'),
-    newVideoSrc: require('@/icons/new_video.svg'),
 
     duration: 0,
     currentTime: 0,
 
     videoList: [],
+    isPlay:false,
   }
-// 文件改变
+  // 文件改变
   onFileChange = (e) => {
-    const {videoList} = this.state
+    const { videoList } = this.state
     const File = e.currentTarget.files[0]
     const rowUrl = e.currentTarget.value
 
@@ -56,11 +56,16 @@ class Home extends Component {
     this.setState({
       videoSrc: videoSrc,
       videoList
+    },()=>{
+      setTimeout(()=>{
+        if(!this.video.error){
+          this.handleReplay()
+        }
+      },200)
     })
     e.currentTarget.value = null
   }
   handleVideoChange = (item) => {
-
     this.setState({
       videoSrc: item.url
     })
@@ -113,7 +118,6 @@ class Home extends Component {
     this.video.currentTime = val
   }
 
-
   handleReplay = () => {
     setTimeout(() => {
       if (this.video.paused && !this.progress.state.dragging) {//如果视频没有播放, 改变完currentTime后就播放
@@ -124,7 +128,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const {video} = this
+    const { video } = this
     /*获取播放列表缓存*/
     const videoListStr = localStorage.getItem('videoList')
     const videoList = videoListStr ? JSON.parse(videoListStr) : []
@@ -138,12 +142,20 @@ class Home extends Component {
         canPlay: true,
         duration: this.video.duration
       })
-      // 获取视频原始宽高
-      console.log(video.videoHeight);
     }
     // 视频播放出错
     video.onerror = e => {
-      console.log('视频错误:', this.video.error);
+      const err = this.video.error
+      console.log(err,err.code)
+      if (err&&err.message&&err.message.indexOf('DEMUXER_ERROR_COULD_NOT_OPEN') !== -1) {
+        alert('视频格式错误,无法播放')
+        setTimeout(() => {
+          this.state.videoList.pop()
+          this.setState({
+            videoList: this.state.videoList
+          })
+        },10)
+      }
     }
     // 视频播放进度改变
     video.ontimeupdate = this.handleVideoPlay
@@ -169,7 +181,7 @@ class Home extends Component {
   }
 
   handleFullScreen = () => {
-    const {isFullScreen} = this.state
+    const { isFullScreen } = this.state
     if (isFullScreen) {
       this.exitFullScreen()
     } else {
@@ -178,7 +190,7 @@ class Home extends Component {
   }
   // 全屏
   requestFullScreen = () => {
-    const {videoContainer} = this   // 该元素必须设置宽高100%, 否则在360等浏览器全屏时不会自动铺满
+    const { videoContainer } = this   // 该元素必须设置宽高100%, 否则在360等浏览器全屏时不会自动铺满
 
     if (videoContainer.requestFullscreen) {
       videoContainer.requestFullscreen()
@@ -190,7 +202,7 @@ class Home extends Component {
     this.setState({
       isFullScreen: true
     })
-
+document.body.style.transform = 'rotate(90deg)'
     // 监听全屏事件
     videoContainer.addEventListener("fullscreenchange", this.listenEsc);
     videoContainer.addEventListener("mozfullscreenchange", this.listenEsc);
@@ -199,7 +211,7 @@ class Home extends Component {
   }
   // 取消全屏
   exitFullScreen = () => {
-    const {videoContainer} = this
+    const { videoContainer } = this
 
     if (document.exitFullscreen) {
       document.exitFullscreen()
@@ -208,6 +220,8 @@ class Home extends Component {
     } else if (document.webkitCancelFullScreen) {
       document.webkitCancelFullScreen()
     }
+    
+document.body.style.transform = ''
     this.setState({
       isFullScreen: false
     })
@@ -232,8 +246,8 @@ class Home extends Component {
   }
   handleKeyEvent = e => {
     const code = e.keyCode
-    const {video} = this
-    const {volume} = video
+    const { video } = this
+    const { volume } = video
 
     switch (code) {
       case 37:// 左方向键, 回放5s
@@ -248,7 +262,7 @@ class Home extends Component {
       case 40: // 下方向键, 音量减小0.1
         video.volume = volume >= 0.1 ? (volume - 0.1).toFixed(1) : 0
         break
-      default :
+      default:
         break
     }
   }
@@ -257,56 +271,46 @@ class Home extends Component {
 
 
   render() {
-    const {videoSrc} = this.state
+    const { videoSrc } = this.state
     return (
-
       <div className={'home'}>
-        <div className={`homeLeft`} style={{display: videoSrc ? 'block' : 'block'}}>
-          {/*{*/}
-            {/*!videoSrc && (*/}
-              {/*<div className="mask">*/}
-                {/*<div className={'tips'}>您还没有可以播放的视频</div>*/}
-                {/*<FileSelect showBtn onChange={e => this.onFileChange(e)}>选择视频</FileSelect>*/}
-              {/*</div>)*/}
-          {/*}*/}
+        <div className={`homeLeft`} style={{ display: videoSrc ? 'block' : 'block' }}>
+          {
+          !videoSrc && (
+          <div className="mask">
+          <div className={'tips'}>您还没有可以播放的视频</div>
+          <FileSelect showBtn onChange={e => this.onFileChange(e)}>选择视频</FileSelect>
+          </div>)
+          }
           <div className={'player-wrapper'} ref={videoContainer => this.videoContainer = videoContainer}
-               onFocus={() => {
-                 console.log('focus');
-               }}
-               onMouseLeave={this.handleMouseLeave}
-               onMouseMove={this.handleShowControl}
+            onFocus={() => {
+              console.log('focus');
+            }}
+            onMouseLeave={this.handleMouseLeave}
+            onMouseMove={this.handleShowControl}
           >
-            <div ref={videoPlayer => this.videoPlayer = videoPlayer}>
               <video className={'video'} src={this.state.videoSrc} ref={video => this.video = video}
-                     style={this.videoStyle}
-                     autoPlay={true}>
+                style={this.videoStyle}
+              >
                 您的浏览器不支持该播放视频
               </video>
-            </div>
 
-            {/*打开新视频*/}
-            <div className={'file-select-mask'} style={{right: this.state.showControl ? '0' : '-48px'}}>
-
-              {/*选择视频*/}
-              <FileSelect onChange={e => this.onFileChange(e)}>
-                <img className={'img32'} alt={'打开视频'} title={'打开视频'} src={this.state.newVideoSrc}/>
-              </FileSelect>
-            </div>
+          
             <div className={'controls'} ref={controls => this.controls = controls}
-                 style={{bottom: this.state.showControl ? '0' : '-72px'}}>
+              style={{ bottom: this.state.showControl ? '0' : '-72px' }}>
 
 
               {/*进度条*/}
               <div className="progress-line">
                 <Slider ref={progress => this.progress = progress} value={this.state.currentTime} min={0}
-                        max={this.state.duration}
-                        onChange={this.handleProgressChange} onDragEnd={this.handleReplay}/>
+                  max={this.state.duration}
+                  onChange={this.handleProgressChange} onDragEnd={this.handleReplay} />
 
                 <div className="time">
                   <span>
                     {timeFormat(this.state.currentTime)}
                   </span>
-                      /
+                  /
                   <span>
                     {timeFormat(this.state.duration)}
                   </span>
@@ -315,19 +319,20 @@ class Home extends Component {
 
               {/*底部控制栏*/}
               <VideoControllers
+              ref={controlBtn=>this.controlBtn = controlBtn}
                 isFullScreen={this.state.isFullScreen}
                 video={this.video}
-                handleFullScreen={this.handleFullScreen}/>
+                handleFullScreen={this.handleFullScreen} />
             </div>
           </div>
         </div>
         {this.state.videoList.length > 0 &&
-        <div className="homeRight">
-          {/*播放历史*/}
+          <div className="homeRight">
+            {/*播放历史*/}
 
-          <VideoHistory onClick={this.handleVideoChange} onFileChange={this.onFileChange} videoList={this.state.videoList}/>
+            <VideoHistory onClick={this.handleVideoChange} onFileChange={this.onFileChange} videoList={this.state.videoList} />
 
-        </div>}
+          </div>}
       </div>
     );
   }

@@ -16,7 +16,7 @@ static defaultProps={
     const {onChange, className, showBtn, ...rest} = this.props
     return (
       <div className={'file-select'} onClick={this.handleSelectFile}>
-        <input id={'file-select-input'} ref={file => this.file = file} hidden={true} type="file" accept={'.mp4'}
+        <input id={'file-select-input'} ref={file => this.file = file} hidden={true} type="file" accept="video/mp4,.mp4,"
                onChange={e => onChange(e)}/>
         {
           showBtn ? (

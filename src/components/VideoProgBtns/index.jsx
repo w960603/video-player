@@ -33,7 +33,7 @@ class VideoProgBtns extends Component {
         <span onClick={this.handlePauseVideo}>
             <img className={'play-btn'} src={
               video && !video.paused ? stopBtnSrc : playBtnSrc
-            } title={video && !video.paused ? '暂停' : '播放'}/>
+            } title={video && !video.paused ? '暂停' : '播放'} alt='播放'/>
           </span>
         <span onClick={this.handleChangeProgress.bind(this, 15)}>
             <img className={'time-btn'} src={require('@/icons/qianjins.svg')} title={'前进15s'} alt="前进15s"/>

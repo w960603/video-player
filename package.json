@@ -1,6 +1,7 @@
 {
   "name": "my-video-player",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@babel/core": "7.6.0",

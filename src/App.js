@@ -6,10 +6,10 @@ import Home from './pages/Home'
 
 function App() {
   return (
-    <div >
-      App.js
+    <>
+      <div className='main-title'>介似一个视频播放器</div>
       <Home />
-    </div>
+    </>
   );
 }
 
